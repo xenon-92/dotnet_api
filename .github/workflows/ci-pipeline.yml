@@ -27,7 +27,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '7.0.x'
       - name: Restore dependencies
         run: dotnet restore
       - name: build solution
@@ -88,17 +88,16 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '7.0.x'
+      - name: Install dependencies
+        run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release
+      
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --output ./nupkg
         
-      - name: Package
-        run: >
-          dotnet pack --no-restore --no-build --configuration Release 
-          -p:PackageVersion=${{ github.ref_name }} --output .
-        
-      - name: Publish
-        run: >
-          dotnet nuget push PackageUtils.${{ github.ref_name }}.nupkg 
-          -s https://nuget.pkg.github.com/xenon-92/index.json 
-          -k ${{ secrets.GHCR_PAT_X }}
+      - name: Publish NuGet package to GitHub Packages
+        run: dotnet nuget push ./nupkg/*.nupkg --source "github" --api-key ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

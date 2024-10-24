@@ -476,7 +476,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "C:\\Users\\sujana\\Desktop\\dotnet_core_check_Package\\dotnet_api\\dotnet_api.csproj",
-      "projectName": "dotnet_api",
+      "projectName": "Weather_API",
       "projectPath": "C:\\Users\\sujana\\Desktop\\dotnet_core_check_Package\\dotnet_api\\dotnet_api.csproj",
       "packagesPath": "C:\\Users\\sujana\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\sujana\\Desktop\\dotnet_core_check_Package\\dotnet_api\\obj\\",
