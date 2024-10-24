@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
     <PackageId>Weather_API</PackageId>
     <Version>1.0.0</Version>
     <Authors>Sumit Jana</Authors>
