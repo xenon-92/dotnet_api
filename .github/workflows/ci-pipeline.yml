@@ -89,20 +89,16 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      - name: Restore dependencies
-        run: dotnet restore
-      - name: build solution
-        run: dotnet build --no-restore
-      - name: Install OpenAPI Generator
-        run: npm install @openapitools/openapi-generator-cli -g
-        id: generate_sdk
-      - name: Generate SDK from OpenAPI Spec
-        run: openapi-generator-cli generate -i ./openapi.yaml -g csharp -o ./generated-sdk
-      - run: ls -la ./generated-sdk
-      - name: Publish to GitHub Packages
-        run: |
-          dotnet pack ./generated-sdk
-          dotnet nuget add source --username xenon-92 --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/xenon-92/index.json"
-          dotnet nuget push ./generated-sdk/bin/Debug/*.nupkg --source "github"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build
+        run: dotnet build --configuration Release
+        
+      - name: Package
+        run: >
+          dotnet pack --no-restore --no-build --configuration Release 
+          -p:PackageVersion=${{ github.ref_name }} --output .
+        
+      - name: Publish
+        run: >
+          dotnet nuget push PackageUtils.${{ github.ref_name }}.nupkg 
+          -s https://nuget.pkg.github.com/xenon-92/index.json 
+          -k ${{ secrets.GHCR_PAT_X }}
