@@ -89,11 +89,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      - name: Generate SDK
+      - name: Install OpenAPI Generator
         run: npm install @openapitools/openapi-generator-cli -g
         id: generate_sdk
-      - name: Publish SDK
+      - name: Generate SDK from OpenAPI Spec
         run: openapi-generator-cli generate -i ./openapi.yaml -g csharp -o ./generated-sdk
+      - run: ls -la ./generated-sdk
       - name: Publish to GitHub Packages
         run: |
           dotnet pack ./generated-sdk
