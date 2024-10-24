@@ -89,6 +89,10 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: build solution
+        run: dotnet build --no-restore
       - name: Install OpenAPI Generator
         run: npm install @openapitools/openapi-generator-cli -g
         id: generate_sdk
