@@ -79,6 +79,7 @@ jobs:
       - name: push GHCR image
         run: |
           docker push ghcr.io/xenon-92/${{ env.GHCR_IMAGE_NAME }}:${{ env.TAG }}
+## The below step publishes this project as nuget, which we don't want ###
   Generate_SDK_and_Github_Publish:
     runs-on: 'ubuntu-latest'
     needs: [GHCR_build_and_push, docker_build_and_push]
@@ -101,3 +102,31 @@ jobs:
         run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Generate_auto_gen_client_and_publish:
+    runs-on: 'ubuntu-latest'
+    needs: [GHCR_build_and_push, docker_build_and_push]
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - uses: microsoft/setup-kiota@v0.5.0
+      - name: create and build class library in autogen-clients
+        run: |
+          cd autogen-client
+          cp ../openapi.yaml ./sdk.yml
+          dotnet new classlib -o NMS-Client
+          cd NMS-Client
+          dotnet add package Microsoft.Kiota.Bundle
+          kiota generate -l CSharp -c NMSClient -n NMS.Client -d ../sdk.yml -o ./Client
+          dotnet build
+      - name: Pack NuGet Package
+        run: |
+          cd autogen-client/NMS-Client
+          dotnet pack --configuration Release -p:PackageVersion=1.0.${{ github.run_number }}
+      - name: Publish NuGet Package
+        run: |
+          cd autogen-client/NMS-Client
+          dotnet nuget push bin/Release/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}
