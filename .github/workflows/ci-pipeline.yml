@@ -95,8 +95,7 @@ jobs:
         run: dotnet build --configuration Release
       
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --output ./nupkg
-        
+        run: dotnet pack --configuration Release --output ./nupkg /p:PackageVersion=1.0.${{ github.run_number }}
         
       - name: Publish NuGet package to GitHub Packages
         run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}
