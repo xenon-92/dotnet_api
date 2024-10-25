@@ -122,3 +122,11 @@ jobs:
           dotnet add package Microsoft.Kiota.Bundle
           kiota generate -l CSharp -c NMSClient -n NMS.Client -d ../sdk.yml -o ./Client
           dotnet build
+      - name: Pack NuGet Package
+        run: |
+          cd autogen-client/NMS-Client
+          dotnet pack --configuration Release -p:PackageVersion=1.0.${{ github.run_number }}
+      - name: Publish NuGet Package
+        run: |
+          cd autogen-client/NMS-Client
+          dotnet nuget push bin/Release/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}

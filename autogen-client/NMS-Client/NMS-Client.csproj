@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>NMS_Client</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Hyland.SEU.POC_AGENT</PackageId>
+    <Version>1.0.0</Version>
+    <Author>1.0.0</Author>
+    <Product>POC_AGENT</Product>
+    <Company>Hyland</Company>
+    <Description>Proof of concept</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.13.1" />
+  </ItemGroup>
+
+</Project>

@@ -7,3 +7,6 @@ cd NMS-Client
 dotnet add package Microsoft.Kiota.Bundle
 kiota generate -l CSharp -c NMSClient -n NMS.Client -d ../sdk.yml -o ./Client
 dotnet build
+
+
+PackageId : Company.Package.Feature
