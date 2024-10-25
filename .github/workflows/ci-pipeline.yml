@@ -112,6 +112,10 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.x'
+      - name: Install Kiota as .NET global tool
+        run: |
+          dotnet tool install --global Kiota
+          export PATH="$PATH:/home/runner/.dotnet/tools"
       - name: create and build class library in autogen-clients
         run: |
           cd autogen-client
