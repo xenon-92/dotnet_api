@@ -116,7 +116,9 @@ jobs:
       - name: create and build class library in autogen-clients
         run: |
           cd autogen-client
-          dotnet new classlib -o KiotaPosts
+          cp ../openapi.yaml ./sdk.yml
+          dotnet new classlib -o NMS-Client
+          cd NMS-Client
           dotnet add package Microsoft.Kiota.Bundle
-          kiota generate -l CSharp -c PostsClient -n KiotaPosts.Client -d ../openapi.yaml -o ./Client
-          dotnet build AutogenClientsLib
+          kiota generate -l CSharp -c NMSClient -n NMS.Client -d ../sdk.yml -o ./Client
+          dotnet build
