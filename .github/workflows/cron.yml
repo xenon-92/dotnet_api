@@ -6,6 +6,7 @@ on:
     - cron: '30 8 * * *'
     - cron: '*/2 * * * *'
 
+
 jobs:
   testing_cron_schedule_template:
     runs-on: ubuntu-latest
