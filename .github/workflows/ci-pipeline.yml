@@ -117,12 +117,6 @@ jobs:
           cd autogen-client
           dotnet new classlib --name AutogenClientsLib
           dotnet build AutogenClientsLib
-      - name: Add Kiota Bundle package
-        run: |
-          cd autogen-client
           dotnet add package Microsoft.Kiota.Bundle
-      - name: create C# auto generated client
-        run: |
-          cd autogen-client
           kiota generate -l CSharp -c PostsClient -n KiotaPosts.Client -d ../openapi.yaml -o ./Client
           dotnet build AutogenClientsLib
