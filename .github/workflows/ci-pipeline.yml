@@ -79,6 +79,7 @@ jobs:
       - name: push GHCR image
         run: |
           docker push ghcr.io/xenon-92/${{ env.GHCR_IMAGE_NAME }}:${{ env.TAG }}
+## The below step publishes this project as nuget, which we don't want ###
   Generate_SDK_and_Github_Publish:
     runs-on: 'ubuntu-latest'
     needs: [GHCR_build_and_push, docker_build_and_push]
@@ -101,3 +102,27 @@ jobs:
         run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Generate_auto_gen_client_and_publish:
+    runs-on: 'ubuntu-latest'
+    needs: [GHCR_build_and_push, docker_build_and_push]
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0.x'
+      - name: create and build class library in autogen-clients
+        run: |
+          cd autogen-clients
+          dotnet new classlib --name AutogenClientsLib
+          dotnet build AutogenClientsLib
+      - name: Add Kiota Bundle package
+        run: |
+          cd autogen-clients
+          dotnet add package Microsoft.Kiota.Bundle
+      - name: create C# auto generated client
+        run: |
+          cd autogen-clients
+          kiota generate -l CSharp -c PostsClient -n KiotaPosts.Client -d ../openapi.yaml -o ./Client
+          dotnet build AutogenClientsLib
