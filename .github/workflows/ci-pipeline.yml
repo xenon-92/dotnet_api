@@ -176,4 +176,8 @@ jobs:
       - name: run stress test
         run: |
           cd graffana-test
-          k6 run my-test.js
+          k6 run my-test.js --out json=stress_test.json
+      - name: display stress test JOSN result
+        run: |
+          cd graffana-test
+          cat stress_test.json
