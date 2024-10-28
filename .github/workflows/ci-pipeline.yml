@@ -149,7 +149,7 @@ jobs:
           cd POSTAPI_Client
           dotnet add package Microsoft.Kiota.Bundle
           kiota generate -l CSharp -c PostsClient -n Posts.Client -d ../sdk.yml -o ./Client
-          rm Class1
+          rm Class1.cs
           dotnet build
       - name: Pack NuGet Package
         run: |
