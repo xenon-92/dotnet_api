@@ -159,3 +159,21 @@ jobs:
         run: |
           cd autogen-client/POSTAPI_Client
           dotnet nuget push bin/Release/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GHCR_PAT_X }}
+  Stress_test_using_graffana_k6:
+    runs-on: 'ubuntu-latest'
+    needs: [Generate_auto_gen_client_and_publish_for_POST_API, Generate_auto_gen_client_and_publish]
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+      - name: Install k6
+        run: |
+          sudo gpg -k
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          cho "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+          echo "graffana k6 installed successfully!!!!!"
+      - name: run stress test
+        run: |
+          cd graffana-test
+          k6 run my-test.js
