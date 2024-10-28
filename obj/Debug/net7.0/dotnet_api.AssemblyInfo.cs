@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Short description of your package.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+edaf43e56887885c2ccb89a080c29c81ca373f55")]
 [assembly: System.Reflection.AssemblyProductAttribute("dotnet_api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("dotnet_api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
